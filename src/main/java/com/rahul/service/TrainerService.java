@@ -35,9 +35,7 @@ public class TrainerService {
         }
     
         // Directory where the image will be stored on the server
-
-        String uploadDir = "D:/TeachToTech/TeachToTech/src/main/resources/static/assets/img/team/";
-
+        String uploadDir = "C:/Users/isp/Documents/ayushi_pagal/TeachToTech/src/main/resources/static/assets/img/team/";
         String fileName = imageFile.getOriginalFilename();
     
         try {
@@ -60,5 +58,6 @@ public class TrainerService {
             throw new RuntimeException("Failed to save image: " + e.getMessage());
         }
     }
+   
 
 }
