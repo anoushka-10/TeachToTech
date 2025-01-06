@@ -2,6 +2,8 @@ package com.rahul.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,14 +11,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rahul.model.Category;
 import com.rahul.model.Trainer;
 import com.rahul.repository.TrainerRepository;
 
 @Service
 public class TrainerService {
-    
+
+      private static final Trainer DEFAULT_TRAINER = new Trainer(
+            0L, // Static ID for the default trainer
+            "Default Trainer", // Name
+            "This is a default trainer added automatically.", // Description
+            "default-image.png", // Image
+            "Default Qualification", // Qualification
+            "https://www.linkedin.com/in/default-trainer", // LinkedIn URL
+            new HashSet<>(Collections.singleton(new Category(0L, "Default Category", null))), // Categories
+            new HashSet<>() // Courses
+    );
     @Autowired
     private TrainerRepository trainerRepository;
+
+    @Autowired
+    private  ObjectMapper objectMapper;
 
     public void addTrainer(Trainer trainer){
         this.trainerRepository.save(trainer);
@@ -35,7 +53,7 @@ public class TrainerService {
         }
     
         // Directory where the image will be stored on the server
-        String uploadDir = "C:/Users/isp/Documents/ayushi_pagal/TeachToTech/src/main/resources/static/assets/img/team/";
+        String uploadDir = "D:/TeachToTech/TeachToTech/src/main/resources/static/assets/img/team/";
         String fileName = imageFile.getOriginalFilename();
     
         try {
@@ -58,6 +76,54 @@ public class TrainerService {
             throw new RuntimeException("Failed to save image: " + e.getMessage());
         }
     }
-   
+    public Trainer getByTrainerId(Long id) {
+       return this.trainerRepository.findByTrainerId(id).orElse(null);
+    }
+
+    public String convertObjectToJsonString(Trainer trainer) throws JsonProcessingException {
+        return this.objectMapper.writeValueAsString(trainer);
+    }
+
+    // Convert JSON string back to Course object
+    public Trainer convertJsonToModel(String json) throws JsonProcessingException {
+        return this.objectMapper.readValue(json, Trainer.class);
+    }
+
+    // Combined example: Convert object to JSON and back to object
+    public Trainer convertObjectToJsonAndBack(Trainer trainer) throws JsonProcessingException {
+        String json = convertObjectToJsonString(trainer); // Convert object to JSON
+        return convertJsonToModel(json); // Convert JSON back to object
+    }
+    public Trainer updateTrainerWithImage(Long trainerId, Trainer updatedTrainer, MultipartFile imageFile) throws Exception {
+        Trainer existingTrainer = this.trainerRepository.findById(trainerId)
+            .orElseThrow(() -> new Exception("Trainer not found"));
+
+        // Check for duplicate 
+        Optional<Trainer> duplicateTrainer =this.trainerRepository.findByLinkedin(existingTrainer.getLinkedin());
+
+        if (duplicateTrainer.isPresent() && !duplicateTrainer.get().getTrainerId().equals(trainerId)) {
+            throw new Exception("A course with the same name and instructor already exists.");
+        }
+        
+            String imagePath = this.saveImage(imageFile);
+            existingTrainer.setTrainerImage(imagePath);
+
+            existingTrainer.setTrainerName(updatedTrainer.getTrainerName());
+            existingTrainer.setTrainerDescription(updatedTrainer.getTrainerDescription());
+            existingTrainer.setTrainerQualification(updatedTrainer.getTrainerQualification());
+            existingTrainer.setLinkedin(updatedTrainer.getLinkedin());
+            existingTrainer.setCategories(updatedTrainer.getCategories());
+        
+        return this.trainerRepository.save(existingTrainer);
+    }
+    public void deleteById(Long trainerId) {
+        this.trainerRepository.deleteById(trainerId);
+        ensureDefaultTrainer();
+    }
+    private void ensureDefaultTrainer() {
+        if (trainerRepository.count() == 0) {
+            trainerRepository.save(DEFAULT_TRAINER);
+        }
+    }
 
 }

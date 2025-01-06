@@ -17,7 +17,7 @@ import com.rahul.repository.CourseRepository;
 
 @Service
 public class CourseService {
-
+ 
     @Autowired
     private CourseRepository courseRepository;
     
@@ -94,8 +94,8 @@ public class CourseService {
         }
     
         // Directory where the image will be stored on the server
-        String uploadDir = "C:/Users/isp/Documents/ayushi_pagal/TeachToTech/src/main/resources/static/assets/img/";
         String fileName = imageFile.getOriginalFilename();
+        String uploadDir = "D:/TeachToTech/TeachToTech/src/main/resources/static/assets/img/";
     
         try {
             // Create the directory if it doesn't exist
@@ -130,14 +130,12 @@ public class CourseService {
             throw new Exception("A course with the same name and instructor already exists.");
         }
         
-            String imagePath = saveImage(imageFile);
-            existingCourse.setImage(imagePath);  
-        
-
+            String imagePath = this.saveImage(imageFile);
+            existingCourse.setImage(imagePath);
         // Update other course fields
         existingCourse.setCourseName(updatedCourse.getCourseName());
-        existingCourse.setDescription(updatedCourse.getDescription());
         existingCourse.setCategory(updatedCourse.getCategory());
+        existingCourse.setDescription(updatedCourse.getDescription());
         existingCourse.setDuration(updatedCourse.getDuration());
         existingCourse.setModules(updatedCourse.getModules());
         existingCourse.setTrainers(updatedCourse.getTrainers());
