@@ -21,18 +21,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rahul.model.Course;
 import com.rahul.service.CourseService;
 
-import lombok.extern.slf4j.Slf4j;
-
 
 @Controller
-@Slf4j
 @RequestMapping("/api/courses")
 public class CourseController {
 	 
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/addNew")
+    @GetMapping("/add/New")
     public String getAdcourse(Model model){
         model.addAttribute("course", new Course());
         return "AddNewCourse"; 
@@ -53,8 +50,6 @@ public class CourseController {
         if (imagePath != null) {
             course.setImage(imagePath);
         }
-
-        // Save the course in the database
         Optional<Course> course1 = this.courseService.findByCourseName(course.getCourseName());
         if (course1.isPresent()) {
             if (this.courseService.findByPrice(course1.get().getPrice()).isPresent()) {
@@ -62,7 +57,6 @@ public class CourseController {
             }
         }
         this.courseService.saveCourse(course);
-
         return ResponseEntity.ok("Course added successfully");
     } catch (Exception e) {
         e.printStackTrace();
@@ -104,23 +98,16 @@ public class CourseController {
     @PathVariable Long courseId,
     @RequestParam("payload") String updatedCourseJson,
     @RequestParam(value = "image", required = false) MultipartFile imageFile) {
-
-    // Use the courseId from the URL
     try {
         // Parse the JSON string to get course data
         ObjectMapper objectMapper = new ObjectMapper();
         Course updatedCourse = objectMapper.readValue(updatedCourseJson, Course.class);
-        log.info(updatedCourseJson);
         Course updated = courseService.updateCourseWithImage(courseId, updatedCourse, imageFile);
-        log.info(updated+"");
         return ResponseEntity.ok(updated);
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 }
-
-
-    //change done by ayushi 
     @GetMapping("/details/{id}")
     public ResponseEntity<Course> getCourseDetails(@PathVariable Long id) {
         Course course = courseService.getCourseById(id);
@@ -130,6 +117,11 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("/delete/{id}")
+	public ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+		courseService.deleteCourse(id);
+		return ResponseEntity.ok().build(); 
+	}
    
 
 }

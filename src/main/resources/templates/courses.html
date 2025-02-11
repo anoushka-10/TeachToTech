@@ -129,7 +129,7 @@
 		#hero {
 			position: relative;
 			width: 100%;
-			height: 100vh;
+			height: 80vh;
 			min-height: 600px;
 			background: #000;
 			overflow: hidden;
@@ -167,25 +167,27 @@
 			object-fit: cover;
 		}
 
-		.hero-content {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: 100%;
-			z-index: 2;
-			text-align: center;
-			padding: 0 15px;
-		}
+.hero-content {
+    position: absolute;
+    top: 45%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 5;
+    text-align: center;
+    padding: 0 30px;
+}
 
 		.hero-content .container {
-			max-width: 1140px;
+			/* max-width: 1140px; */
+			padding: 0 30px; 
+			margin: 0 auto;
 
 		}
 
 		.hero-content h2 {
 			color: #fff;
-			font-size: 72px;
+			font-size: 48px;
 			font-weight: 700;
 			margin-bottom: 30px;
 			text-align: left;
@@ -193,62 +195,105 @@
 
 		.hero-content p {
 			color: #fff;
-			font-size: 24px;			
+			font-size: 24px;
+			line-height: 1.5;
 			max-width: 100%;
-			margin: 0;
-			text-align: justify;
-		}
-
-		.carousel-indicators {
-			z-index: 3;
-		}
-
-		.carousel-control-prev,
-		.carousel-control-next {
-			z-index: 3;
-			width: 5%;
-			opacity: 0.7;
-		}
-
-		/* Responsive adjustments */
-		@media (max-width: 768px) {
-			#hero {
-				height: 80vh;
-				min-height: 500px;
-			}
-
-			.hero-content h2 {
-				font-size: 36px;
-				margin-bottom: 20px;
-			}
-
-			.hero-content p {
-				font-size: 30px;
-				padding: 0 20px;
-			}
+			margin: 0 auto;
+			text-align: left;
 		}
 
 		.carousel-text {
 			font-size: 2rem;
 		}
 
-		@media (max-width: 576px) {
-			.hero-content h2 {
-				font-size: 28px;
-			}
 
-			.hero-content p {
-				font-size: 14px;
-			}
-		}
-	</style>
+
+
+
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 10;
+    width: 5%;
+    opacity: 0.7;
+}
+
+		
+@media (max-width: 992px) {
+    #hero {
+        height: 70vh;
+        min-height: 500px;
+    }
+
+    .hero-content h2 {
+        font-size: 36px;
+    }
+
+    .hero-content p {
+        font-size: 20px;
+        max-width: 90%;
+    }
+}
+
+
+@media (max-width: 768px) {
+    #hero {
+        height: 60vh;
+    }
+
+    .hero-content h2 {
+        font-size: 28px;
+        text-align: left;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+        text-align: left;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-content h2 {
+        font-size: 24px;
+    }
+
+    .hero-content p {
+        font-size: 10px;
+        max-width: 100%;
+    }
+}
+
+
+/* .carousel-caption {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.carousel-caption h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.carousel-caption p {
+    font-size: 18px;
+    line-height: 1.5;
+} */
+
+</style>
 
 </head>
 
 <body class="courses-page">
 
 
-	<div th:replace="header :: header"></div>
+	<div th:replace="~{header :: header}"></div>
 
 	<main class="main">
 
@@ -256,7 +301,7 @@
 		<div class="page-title" data-aos="fade">
 
 			<section id="hero" class="hero section dark-background">
-				<div id="courseCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+				<div id="courseCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
 					<!-- Carousel Indicators -->
 					<div class="carousel-indicators">
 						<button type="button" data-bs-target="#courseCarousel" data-bs-slide-to="0" class="active"
@@ -273,36 +318,52 @@
 							<div class="carousel-image">
 								<img src="assets/img/course-rahul.jpg" alt="Course Image 1">
 							</div>
-						</div>
-						<div class="carousel-item">
-							<div class="carousel-image">
-								<img src="assets/img/course-1.jpg" alt="Course Image 2">
+							<div class="hero-content">
+								<div class="container">
+									<h2>Courses</h2>
+									<p>At TeachToTech, we bridge the gap between curiosity and
+										expertise in the
+										world of Information Technology. Our courses are designed to equip learners with
+										practical, in-demand tech skills—from coding and
+										cybersecurity to data analytics and cloud computing. Whether you're a beginner
+										or a
+										professional looking to upskill, we provide flexible, hands-on learning guided
+										by
+										industry experts.Start your journey with us and take a step toward mastering the
+										future
+										of technology!</p>
+								</div>
 							</div>
 						</div>
+
 						<div class="carousel-item">
 							<div class="carousel-image">
-								<img src="assets/img/course-2.jpg" alt="Course Image 3">
+								<img src="assets/img/Internship.jpg" alt="Course Image 2">
+							</div>
+							<div class="hero-content">
+								<div class="container">
+									<h2>Internship</h2>
+									<p>An internship program for students is designed to provide hands-on learning and professional experience in a specific field. It bridges the gap between academic knowledge and practical application, helping students develop industry-relevant skills and insights. These programs often involve mentoring, real-world projects, and exposure to workplace environments, fostering personal and professional growth.
+
+By participating in internships, students enhance their problem-solving, teamwork, and communication abilities while building a professional network. Tailored to various industries and disciplines, such programs prepare students for their future careers, offering a platform to explore their interests and contribute to meaningful projects.</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="carousel-item">
+							<div class="carousel-image">
+								<img src="assets/img/WebDevelopment.jpg" alt="Course Image 3">
+							</div>
+							<div class="hero-content">
+								<div class="container">
+									<h2>Web Development</h2>
+									<p>TeachToTech offers a comprehensive learning experience. It covers core Java, Servlets, JSP, and advanced frameworks like Spring and Hibernate. Students learn to build dynamic web applications, integrate databases with JDBC and Hibernate, and create RESTful APIs. The program emphasizes hands-on projects, deployment on servers like Tomcat, and front-end integration with tools like Thymeleaf. A capstone project ensures practical expertise, preparing students for real-world Java web development challenges.</p>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- Static Text Overlay -->
-					<div class="hero-content">
-						<div class="container">
-							<h2>Courses</h2>
-							<p class="carousel-text">
-								At TeachToTech, we bridge the gap between curiosity and expertise in the world of
-								Information Technology.
-								Our courses are designed to equip learners with practical, in-demand tech skills—from
-								coding and cybersecurity
-								to data analytics and cloud computing. Whether you're a beginner or a professional
-								looking to upskill,
-								we provide flexible, hands-on learning guided by industry experts. Start your journey
-								with us and take a step
-								toward mastering the future of technology!
-							</p>
-						</div>
-					</div>
+
 
 					<!-- Carousel Controls -->
 					<button class="carousel-control-prev" type="button" data-bs-target="#courseCarousel"
@@ -323,8 +384,7 @@
 					<ol>
 						<li><a href="/index">Home</a></li>
 						<li class="current">Courses</li>
-						<li class="adminSection" style="display: none;"><a href="/api/courses/addNew">Add Course</a>
-						</li>
+						<li class="adminSection" style="display: none;"><a href="/api/courses/add/New" >Add Course</a></li>
 					</ol>
 				</div>
 			</nav>
@@ -400,11 +460,15 @@
 									<a th:href="@{api/courses/edit/{id}(id=${course.id})}" class="adminSection"
 										style="display: none;"><button class="edit">Edit</button></a>
 
-									<form th:action="@{api/courses/delete/{id}(id=${course.id})}" method="post"
-										onsubmit="return confirm('Are you sure you want to delete this course?');"
-										class="adminSection" style="display: none;">
-										<button type="submit" class="delete">Delete</button>
-									</form>
+								<form method="post" class="adminSection" 
+										style="display: none;" 
+										onsubmit="deleteCourse(this); return false;">
+									  <input type="hidden" th:value="${course.id}" class="course-id">
+									  <button type="submit" class="delete">Delete</button>
+								  </form>
+								  
+								  
+								  
 								</div>
 							</div>
 						</div>
@@ -420,7 +484,8 @@
 		</section><!-- /Courses Section -->
 
 	</main>
-	<div th:replace="footer :: footer"></div>
+	<div th:replace="~{footer :: footer}"></div>
+
 
 	<!-- Scroll Top -->
 	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i>
@@ -442,9 +507,8 @@
 	<script src="assets/js/main.js"></script>
 	<script>
 
-
-		function checkAuthAndRedirect(courseId) {
-			const token = localStorage.getItem("authToken");
+         function checkAuthAndRedirect(courseId) {
+			const token = localStorage.getItem("token");
 
 			if (token) {
 				window.location.href = `/course-details/${courseId}`;
@@ -452,6 +516,38 @@
 				window.location.href = `/api/users/login?redirect=/course-details/${courseId}`;
 			}
 		}
+
+		async function deleteCourse(form) {
+        // Extract the course ID from the data attribute
+		const courseId = form.querySelector('.course-id').value;
+        const apiUrl = `/api/courses/delete/${courseId}`;
+		const token = localStorage.getItem("token")
+
+        // Confirm deletion
+        if (confirm('Are you sure you want to delete this course?')) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": `Bearer ${token}`, // Replace with your actual token
+                    }
+                });
+
+                // Handle the response
+                if (response.ok) {
+                    alert('Course deleted successfully.');
+                    // Optionally refresh the page or update the UI
+                    window.location.href = "/courses";
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to delete course: ${error.message || response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Error deleting course:', error);
+                alert('An error occurred while deleting the course.');
+            }
+        }
+    }
 	</script>
 
 </body>

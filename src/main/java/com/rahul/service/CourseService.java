@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,8 +17,14 @@ import com.rahul.enum_.CourseStatus;
 import com.rahul.model.Course;
 import com.rahul.repository.CourseRepository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @Service
 public class CourseService {
+
+    @Value("${file.course-upload-dir}")
+    private String uploadDir;
  
     @Autowired
     private CourseRepository courseRepository;
@@ -24,7 +32,11 @@ public class CourseService {
     @Autowired
     private  ObjectMapper objectMapper;
 
-     public void saveCourse(Course course) {
+    @PersistenceContext
+    private EntityManager entityManager;
+    
+    @Transactional
+    public void saveCourse(Course course) {
         course.setStatus(CourseStatus.APPROVED);
         this.courseRepository.save(course);
     }
@@ -92,31 +104,42 @@ public class CourseService {
         if (imageFile == null || imageFile.isEmpty()) {
             return null; // No image provided
         }
-    
-        // Directory where the image will be stored on the server
-        String fileName = imageFile.getOriginalFilename();
-        String uploadDir = "D:/TeachToTech/TeachToTech/src/main/resources/static/assets/img/";
-    
+        // Extract original file name and sanitize it
+        String originalFileName = imageFile.getOriginalFilename();
+        if (originalFileName == null) {
+            throw new RuntimeException("File name cannot be null.");
+        }
+        String sanitizedFileName = originalFileName.replaceAll("[^a-zA-Z0-9.\\-_]", "_");
+
+ 
         try {
+            // Ensure the upload directory ends with a separator
+            if (!uploadDir.endsWith(File.separator)) {
+                uploadDir += File.separator;
+            }
+
             // Create the directory if it doesn't exist
             File directory = new File(uploadDir);
-            if (!directory.exists()) {
-                directory.mkdirs();
+            if (!directory.exists() && !directory.mkdirs()) {
+                throw new RuntimeException("Failed to create upload directory: " + uploadDir);
             }
-    
-            // File object representing the destination
-            File destinationFile = new File(uploadDir + fileName);
-    
-            // Save the file using transferTo()
+
+            // Destination file path
+            File destinationFile = new File(directory, sanitizedFileName);
+
+            // Save the file
             imageFile.transferTo(destinationFile);
-    
-            // Returning the saved file's relative path for frontend usage
-            return "/assets/img/" + fileName;
+
+           // Return the relative path to the file (match your WebConfig handler)
+            return "assets/img/" + sanitizedFileName;
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to save image: " + e.getMessage());
         }
     }
+
+    @Transactional
     public Course updateCourseWithImage(Long courseId, Course updatedCourse, MultipartFile imageFile) throws Exception {
         Course existingCourse = courseRepository.findById(courseId)
             .orElseThrow(() -> new Exception("Course not found"));

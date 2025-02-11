@@ -151,8 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function fetchRole() {
-  const token = localStorage.getItem("authToken");
-  console.log(token);
+  const token = localStorage.getItem("token");
   if (!token) {
       console.log("No token found in localStorage");
       return null;  // If no token, return null
@@ -165,7 +164,6 @@ async function fetchRole() {
               "Authorization": `Bearer ${token}`
           }
       });
-      console.log(response);
       if (!response.ok) {
           throw new Error("Failed to fetch role");
       }
@@ -191,8 +189,8 @@ async function displayAdminContent() {
 
 
     async function fetchUsername() {
-        const token = localStorage.getItem("authToken");
-        console.log("Token from localStorage:", token);  // Token check
+        const token = localStorage.getItem("token");
+           // Token check
         if (!token) {
             document.getElementById("loginButtons").style.display = "block";
             document.getElementById("userGreeting").style.display = "none";
@@ -227,18 +225,40 @@ async function displayAdminContent() {
 
     document.getElementById('logoutButton')?.addEventListener('click', (e) => {
       e.preventDefault();
-      localStorage.removeItem('authToken'); // Remove token from local storage
+      localStorage.removeItem('token'); // Remove token from local storage
       window.location.href = '/index'; // Redirect to home page after logout
     });
 
+    let navigating = false;
 
-	window.addEventListener("beforeunload", function (event) {
-		// Send logout request to server
+    document.addEventListener('click', (event) => {
+        const target = event.target.closest('a, button, form');
+        if (target) {
+            navigating = true;
+        }
+    });
+    
 
-		// Clear any session/local storage if used
-		sessionStorage.clear();
-		localStorage.removeItem('authToken'); // Optional if you store tokens
-	});
+    window.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'hidden') {
+            localStorage.setItem('lastActive', Date.now().toString());
+        }
+    });
+    
 
-
+    window.addEventListener('pagehide', function (event) {
+        if (!navigating) {
+            // Tab close detected
+            navigator.sendBeacon('/logout');
+            sessionStorage.clear();
+            localStorage.removeItem('token');
+        }
+        navigating = false;
+    });
+    
+    // On page load, reset activity tracking
+    window.addEventListener('load', function () {
+        navigating = false;
+    });
+    
     
