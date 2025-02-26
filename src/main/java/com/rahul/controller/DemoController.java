@@ -41,7 +41,22 @@ public class DemoController {
 		model.addAttribute("categories", categories);
 		return "index";
 	}
-
+	@GetMapping("/addassignment")
+	public String showAddAssignmentPage() {
+		return "addAssignment";
+	}
+	@GetMapping("/addnotes")
+	public String showAddNotesPage() {
+		return "addNotes";
+	}
+	@GetMapping("/allnotes")
+	public String showNotesPage(){
+		return "Notes";
+	}
+	public String getMethodName(@RequestParam String param) {
+		return new String();
+	}
+	
 	public String showCourses(Model model) {
 		List<Course> approvedCourses = courseService.getApprovedCourses();
 		model.addAttribute("approvedCourses", approvedCourses);
@@ -76,8 +91,22 @@ public class DemoController {
 		model.addAttribute("categories", categories);
 		return "about";
 	}
-
+	// @GetMapping("/adminpreview")
+	// public String adminReview() {
+	// 	return "adminPreview";
+	// }
 	
+	// @GetMapping("/discoverarticles")
+	// public String Allarticle() {
+	// 	return "discoverArticles";
+	// }
+	
+	
+	@GetMapping("/articlereview/preview")
+	public String articleAdminPreview() {
+		return "adminPreview";
+	}
+
 
 	@GetMapping("/contact")
 	public String contact(Model model) {
@@ -87,8 +116,8 @@ public class DemoController {
 	}
 
 	@GetMapping("/course-details/{id}")
-	public String getCourseDetails(@PathVariable("id") Long courseId, Model model) {
-		Course course = courseService.findCourseById(courseId);
+	public String getCourseDetails(@PathVariable Long id, Model model) {
+		Course course = courseService.findCourseById(id);
 		List<Category> categories = categoryService.getCategory();
 		model.addAttribute("categories", categories);
 
