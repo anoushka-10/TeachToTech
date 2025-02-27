@@ -34,6 +34,9 @@ public class SpringSecurityConfig {
                 .requestMatchers("/api/t2t/admin/transaction/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"api/courses/add/**","api/courses/edit/**",
                                 "api/courses/delete/**","api/trainer/add/**","api/trainer/edit/**",
+                                "/api/trainer/delete/**","/category/**","/api/users/allusers/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"api/courses/add/**","api/courses/edit/**","/api/view-image/**",
+                                            "api/trainer/add/**","api/trainer/edit/**","api/trainer/delete/**","/category/**","/preview/**","/save-content","/article/**","/discoverarticles/**","/success","/articletypes","/articlesByCategory").permitAll()
                                 "/api/trainer/delete/**","/category/**","/api/users/allusers/**","/saveNote").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"api/courses/add/**","api/courses/edit/**",
                                             "api/trainer/add/**","api/trainer/edit/**","api/trainer/delete/**","/category/**","/preview/**","/save-content","/article/**","/discoverarticles/**","/success","/articletypes"
@@ -43,12 +46,14 @@ public class SpringSecurityConfig {
                       "/about","api/users/**","/api/trainer/get","/teachtotech-app/**","/articlewriting/**","/preview/**","/articlereview/**",
                       "/save-content/**","/articles/category/**","/preview","/adminpreview/**","/articletypes","/comments","/savenote","/test/**","/topic/**","/allnotes").permitAll()
                 .requestMatchers(HttpMethod.POST, "/savenote","/test","/save-assignment","/api/notes/**").permitAll()
+                .requestMatchers("/about","api/users/**","/api/trainer/get","/teachtotech-app/**","/articlewriting/**","/preview/**","/articlereview/**","/save-content/**","/articles/category/**","/preview","/adminpreview/**","/articletypes","/comments","/savenote","/test/**","/topic/**","/save-assignment").permitAll()
+                .requestMatchers(HttpMethod.POST, "/savenote","/test","/save-assignment").permitAll()
      
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
             );
-
+            
         return http.build();
     }
 
